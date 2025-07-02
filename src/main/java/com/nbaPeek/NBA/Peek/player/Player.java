@@ -2,22 +2,39 @@ package com.nbaPeek.NBA.Peek.player;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @Entity
 @Table(name="regularszn")
+@JsonPropertyOrder({
+    "id", "pname", "cur","team", "pos", "age", "gp", "mpG", 
+    "ppG", "rpG", "apG", "spG", "bpG", "topG",
+    "usg", "tov", "fta", "ft", "twoPA", "twoP", "threePA", "threeP",
+    "efg", "ts", "pplusR", "pplusA", "pplusRPlusA", "vi", "ortg", "drtg"
+})
 public class Player {
 
     @Id
-    @Column(name = "PNAME", unique = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(name = "PNAME")
     private String PNAME;
     private String TEAM;
-    private char CUR;
     private String POS;
     private double AGE;
     private int GP;
     private double MpG;
+    private double PpG;
+    private double RpG;
+    private double ApG;
+    private double SpG;
+    private double BpG;
+    private double TOpG;
     private double USG;
     private double TOV;
     private int FTA;
@@ -28,29 +45,29 @@ public class Player {
     private double ThreeP;
     private double eFG;
     private double TS;
-    private double PpG;
-    private double RpG;
-    private double ApG;
-    private double SpG;
-    private double BpG;
-    private double TOpG;
     private double PPlusR;
     private double PPlusA;
     private double PPlusRPlusA;
     private double VI;
     private double ORtg;
     private double DRtg;
+    private Character CUR;
 
     public Player() {}
 
-    public Player(String PNAME, String TEAM, char CUR, String POS, double AGE, int GP, double MpG, double USG, double TOV, int FTA, double FT, int TwoPA, double TwoP, int ThreePA, double ThreeP, double eFG, double TS, double PpG, double RpG, double ApG, double SpG, double BpG, double TOpG, double PPlusR, double PPlusA, double PPlusRPlusA, double VI, double ORtg, double DRtg) {
+    public Player(String PNAME, String TEAM, String POS, double AGE, int GP, double MpG, double PpG, double RpG, double ApG, double SpG, double BpG, double TOpG, double USG, double TOV, int FTA, double FT, int TwoPA, double TwoP, int ThreePA, double ThreeP, double eFG, double TS, double PPlusR, double PPlusA, double PPlusRPlusA, double VI, double ORtg, double DRtg, Character CUR) {
         this.PNAME = PNAME;
         this.TEAM = TEAM;
-        this.CUR = CUR;
         this.POS = POS;
         this.AGE = AGE;
         this.GP = GP;
         this.MpG = MpG;
+        this.PpG = PpG;
+        this.RpG = RpG;
+        this.ApG = ApG;
+        this.SpG = SpG;
+        this.BpG = BpG;
+        this.TOpG = TOpG;
         this.USG = USG;
         this.TOV = TOV;
         this.FTA = FTA;
@@ -61,18 +78,21 @@ public class Player {
         this.ThreeP = ThreeP;
         this.eFG = eFG;
         this.TS = TS;
-        this.PpG = PpG;
-        this.RpG = RpG;
-        this.ApG = ApG;
-        this.SpG = SpG;
-        this.BpG = BpG;
-        this.TOpG = TOpG;
         this.PPlusR = PPlusR;
         this.PPlusA = PPlusA;
         this.PPlusRPlusA = PPlusRPlusA;
         this.VI = VI;
         this.ORtg = ORtg;
         this.DRtg = DRtg;
+        this.CUR = CUR;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getPNAME() {
@@ -91,11 +111,11 @@ public class Player {
         this.TEAM = TEAM;
     }
 
-    public char getCUR() {
+    public Character getCUR() {
         return this.CUR;
     }
 
-    public void setCUR(char CUR) {
+    public void setCUR(Character CUR) {
         this.CUR = CUR;
     }
 

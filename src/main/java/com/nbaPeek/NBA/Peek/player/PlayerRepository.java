@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 
-public interface PlayerRepository extends JpaRepository<Player, String> {//provides CROD ops for player entity with type and pkey
-    void deleteByName(String playerName);
+public interface PlayerRepository extends JpaRepository<Player, Long> {//provides CROD ops for player entity with type and pkey
+    void deleteByPNAME(String playerName);
 
-    Optional<List<Player>> findByPNAME(String pNAME);
+    Optional<List<Player>> findByPNAME(String PNAME);
 
-    
+
 }

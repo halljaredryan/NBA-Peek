@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Comparator;
 
 @Component
 public class PlayerService {
@@ -18,6 +19,50 @@ public class PlayerService {
 
     public List<Player> getPlayers(){
         return playerRepository.findAll();
+    }
+
+    // Get players sorted by name
+    public List<Player> getPlayersSortedByName(){
+        return playerRepository.findAll().stream()
+        .sorted(Comparator.comparing(Player::getPNAME))
+        .collect(Collectors.toList());
+    }
+
+    // Get players sorted by team, then by name
+    public List<Player> getPlayersSortedByTeamAndName(){
+        return playerRepository.findAll().stream()
+        .sorted(Comparator.comparing(Player::getTEAM).thenComparing(Player::getPNAME))
+        .collect(Collectors.toList());
+    }
+
+    // Get players sorted by position, then by name
+    public List<Player> getPlayersSortedByPositionAndName(){
+        return playerRepository.findAll().stream()
+        .sorted(Comparator.comparing(Player::getPOS).thenComparing(Player::getPNAME))
+        .collect(Collectors.toList());
+    }
+
+    // Get players sorted by age (youngest first)
+    public List<Player> getPlayersSortedByAge(){
+        return playerRepository.findAll().stream()
+        .sorted(Comparator.comparing(Player::getAGE))
+        .collect(Collectors.toList());
+    }
+
+    // Get players sorted by points per game (highest first)
+    public List<Player> getPlayersSortedByPointsPerGame(){
+        return playerRepository.findAll().stream()
+        .sorted(Comparator.comparing(Player::getPpG).reversed())
+        .collect(Collectors.toList());
+    }
+
+    // Get players sorted by multiple criteria: team, position, name
+    public List<Player> getPlayersSortedByTeamPositionName(){
+        return playerRepository.findAll().stream()
+        .sorted(Comparator.comparing(Player::getTEAM)
+                .thenComparing(Player::getPOS)
+                .thenComparing(Player::getPNAME))
+        .collect(Collectors.toList());
     }
 
     public List<Player> getPlayersFromTeam(String teamName){
@@ -47,6 +92,6 @@ public class PlayerService {
 
     @Transactional
     public void deletePlayer(String playerName){
-        playerRepository.deleteByName(playerName);
+        playerRepository.deleteByPNAME(playerName);
     }
 }
