@@ -8,17 +8,18 @@ resp.raise_for_status()
 
 soup = BeautifulSoup(resp.text, "html.parser")
 
-# The stats tables: first table is "Playoffs", second is "Regular Season"
 tables = soup.find_all("table")
 print(f"Found {len(tables)} tables.")
 
-with open("nba_player_stats.csv", "w", newline="", encoding="utf-8") as f:
-    writer = csv.writer(f)
-    for table in tables:
-        # header row
+for i, table in enumerate(tables):
+    table_name = "playoffs" if i == 0 else "regular_season"
+    filename = f"nba_player_stats_{table_name}.csv"
+    
+    with open(filename, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        
         headers = [th.get_text(strip=True) for th in table.find_all("th")]
         if not headers:
-            # fallback: first row 'td's
             first_row = table.find("tr")
             headers = [td.get_text(strip=True) for td in first_row.find_all("td")]
         writer.writerow(headers)
@@ -27,5 +28,7 @@ with open("nba_player_stats.csv", "w", newline="", encoding="utf-8") as f:
             cols = [td.get_text(strip=True) for td in row.find_all("td")]
             if cols:
                 writer.writerow(cols)
+    
+    print(f"Saved {filename}")
 
-print("Saved nba_player_stats.csv")
+print("All tables saved to separate files.")
