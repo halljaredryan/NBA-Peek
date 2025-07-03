@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController //domain object definer
-@RequestMapping(path = "api/reg/player")
+@RequestMapping(path = "player")
 public class PlayerController {
     private final PlayerService playerService;
 

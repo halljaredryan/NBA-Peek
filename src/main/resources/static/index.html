@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA Stats Peek</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1d428a;
+        }
+        .search-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .search-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .search-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #1d428a;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0d2b5a;
+        }
+        .results {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .player-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+        .player-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1d428a;
+            margin-bottom: 5px;
+        }
+        .player-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .stat {
+            background: white;
+            padding: 8px;
+            border-radius: 4px;
+            border-left: 3px solid #1d428a;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        .stat-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        .error {
+            color: #d32f2f;
+            background: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏀 NBA Stats Peek</h1>
+        <p>Search for NBA players and their statistics</p>
+    </div>
+
+    <div class="search-section">
+        <h2>Search Players</h2>
+        <div class="search-row">
+            <div class="search-group">
+                <label for="playerName">Player Name:</label>
+                <input type="text" id="playerName" placeholder="e.g., LeBron James">
+            </div>
+            <div class="search-group">
+                <label for="teamName">Team:</label>
+                <select id="teamName">
+                    <option value="">All Teams</option>
+                    <option value="Cle">Cleveland Cavaliers</option>
+                    <option value="Lal">Los Angeles Lakers</option>
+                    <option value="Gol">Golden State Warriors</option>
+                    <option value="Bos">Boston Celtics</option>
+                    <option value="Mil">Milwaukee Bucks</option>
+                    <option value="Pho">Phoenix Suns</option>
+                    <option value="Den">Denver Nuggets</option>
+                    <option value="Mia">Miami Heat</option>
+                    <option value="Chi">Chicago Bulls</option>
+                    <option value="Sac">Sacramento Kings</option>
+                    <option value="Lac">Los Angeles Clippers</option>
+                    <option value="Phi">Philadelphia 76ers</option>
+                    <option value="Dal">Dallas Mavericks</option>
+                    <option value="Min">Minnesota Timberwolves</option>
+                    <option value="Hou">Houston Rockets</option>
+                    <option value="Atl">Atlanta Hawks</option>
+                    <option value="Orl">Orlando Magic</option>
+                    <option value="Ind">Indiana Pacers</option>
+                    <option value="Was">Washington Wizards</option>
+                    <option value="Cha">Charlotte Hornets</option>
+                    <option value="Tor">Toronto Raptors</option>
+                    <option value="Bro">Brooklyn Nets</option>
+                    <option value="Nyk">New York Knicks</option>
+                    <option value="Det">Detroit Pistons</option>
+                    <option value="Uta">Utah Jazz</option>
+                    <option value="Mem">Memphis Grizzlies</option>
+                    <option value="Por">Portland Trail Blazers</option>
+                    <option value="Okc">Oklahoma City Thunder</option>
+                    <option value="San">San Antonio Spurs</option>
+                </select>
+            </div>
+            <div class="search-group">
+                <label for="position">Position:</label>
+                <select id="position">
+                    <option value="">All Positions</option>
+                    <option value="G">Guard</option>
+                    <option value="F">Forward</option>
+                    <option value="C">Center</option>
+                    <option value="G-F">Guard-Forward</option>
+                    <option value="F-C">Forward-Center</option>
+                    <option value="F-G">Forward-Guard</option>
+                    <option value="C-F">Center-Forward</option>
+                </select>
+            </div>
+        </div>
+        <div class="search-row">
+            <button onclick="searchPlayers()">Search Players</button>
+            <button onclick="getAllPlayers()">Show All Players</button>
+            <button onclick="clearResults()">Clear Results</button>
+        </div>
+    </div>
+
+    <div class="results" id="results">
+        <div class="loading" id="loading" style="display: none;">Loading...</div>
+        <div id="error" class="error" style="display: none;"></div>
+        <div id="playerList"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'player';
+
+        async function searchPlayers() {
+            const playerName = document.getElementById('playerName').value.trim();
+            const teamName = document.getElementById('teamName').value;
+            const position = document.getElementById('position').value;
+
+            let url = API_BASE + '?';
+            const params = [];
+
+            if (playerName) params.push(`PNAME=${encodeURIComponent(playerName)}`);
+            if (teamName) params.push(`TEAM=${encodeURIComponent(teamName)}`);
+            if (position) params.push(`POS=${encodeURIComponent(position)}`);
+
+            url += params.join('&');
+
+            await fetchPlayers(url);
+        }
+
+        async function getAllPlayers() {
+            await fetchPlayers(API_BASE);
+        }
+
+        async function fetchPlayers(url) {
+            showLoading(true);
+            clearError();
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const players = await response.json();
+                displayPlayers(players);
+            } catch (error) {
+                showError('Error fetching players: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function displayPlayers(players) {
+            const playerList = document.getElementById('playerList');
+            
+            if (players.length === 0) {
+                playerList.innerHTML = '<p>No players found.</p>';
+                return;
+            }
+
+            playerList.innerHTML = `<h3>Found ${players.length} player(s):</h3>`;
+            
+            players.forEach(player => {
+                const playerCard = document.createElement('div');
+                playerCard.className = 'player-card';
+                
+                playerCard.innerHTML = `
+                    <div class="player-name">${player.pname} - ${player.team}</div>
+                    <div><strong>Position:</strong> ${player.pos} | <strong>Age:</strong> ${player.age} | <strong>Games:</strong> ${player.gp}</div>
+                    <div class="player-stats">
+                        <div class="stat">
+                            <div class="stat-label">Points/Game</div>
+                            <div class="stat-value">${player.ppG}</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Rebounds/Game</div>
+                            <div class="stat-value">${player.rpG}</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Assists/Game</div>
+                            <div class="stat-value">${player.apG}</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Minutes/Game</div>
+                            <div class="stat-value">${player.mpG}</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Steals/Game</div>
+                            <div class="stat-value">${player.spG}</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Blocks/Game</div>
+                            <div class="stat-value">${player.bpG}</div>
+                        </div>
+                    </div>
+                `;
+                
+                playerList.appendChild(playerCard);
+            });
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function clearError() {
+            document.getElementById('error').style.display = 'none';
+        }
+
+        function clearResults() {
+            document.getElementById('playerList').innerHTML = '';
+            document.getElementById('playerName').value = '';
+            document.getElementById('teamName').value = '';
+            document.getElementById('position').value = '';
+            clearError();
+        }
+
+        // Load all players on page load
+        window.onload = function() {
+            getAllPlayers();
+        };
+    </script>
+</body>
+</html> 
